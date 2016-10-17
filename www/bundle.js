@@ -21454,9 +21454,9 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Counter = __webpack_require__(174);
+	var _Controls = __webpack_require__(177);
 
-	var _Counter2 = _interopRequireDefault(_Counter);
+	var _Controls2 = _interopRequireDefault(_Controls);
 
 	var _Fullscreen = __webpack_require__(175);
 
@@ -21482,8 +21482,18 @@
 
 	    var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this));
 
+	    var config = {
+	      apiKey: "AIzaSyCMuVAEkpBKQJmu14V8wupV-7DDBs0-2lQ",
+	      authDomain: "chatty-aa427.firebaseapp.com",
+	      databaseURL: "https://chatty-aa427.firebaseio.com",
+	      storageBucket: "",
+	      messagingSenderId: "1045283540357"
+	    };
+	    firebase.initializeApp(config);
+
 	    _this.state = {
-	      width: 257
+	      firebase: firebase,
+	      height: 0
 	    };
 	    return _this;
 	  }
@@ -21491,7 +21501,7 @@
 	  _createClass(App, [{
 	    key: 'handleResize',
 	    value: function handleResize(e) {
-	      this.setState({ width: window.innerWidth });
+	      this.setState({ height: document.getElementById("video").getBoundingClientRect().height });
 	    }
 	  }, {
 	    key: 'componentDidMount',
@@ -21509,7 +21519,7 @@
 	          'div',
 	          { id: 'container' },
 	          _react2.default.createElement(_Video2.default, null),
-	          _react2.default.createElement(_Counter2.default, null)
+	          _react2.default.createElement(_Controls2.default, { firebase: this.state.firebase, height: this.state.height })
 	        ),
 	        _react2.default.createElement(_Fullscreen2.default, null)
 	      );
@@ -21522,122 +21532,7 @@
 	exports.default = App;
 
 /***/ },
-/* 174 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(2);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	/**
-	 * A counter button: tap the button to increase the count.
-	 */
-	var Counter = function (_React$Component) {
-	  _inherits(Counter, _React$Component);
-
-	  function Counter() {
-	    _classCallCheck(this, Counter);
-
-	    var _this = _possibleConstructorReturn(this, (Counter.__proto__ || Object.getPrototypeOf(Counter)).call(this));
-
-	    _this.state = {
-	      yo: 0,
-	      noyo: 0
-	    };
-	    _this.yoRef = firebase.database().ref('yo/');
-	    _this.noYoRef = firebase.database().ref('noyo/');
-	    return _this;
-	  }
-
-	  _createClass(Counter, [{
-	    key: 'handleResize',
-	    value: function handleResize(e) {
-	      // this.setState({count: window.innerWidth});
-	    }
-	  }, {
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      window.addEventListener('resize', this.handleResize.bind(this));
-	    }
-	  }, {
-	    key: 'componentWillMount',
-	    value: function componentWillMount() {
-	      var _this2 = this;
-
-	      this.yoRef.on('value', function (snapshot) {
-	        _this2.setState({ yo: snapshot.val() });
-	      });
-	      this.noYoRef.on('value', function (snapshot) {
-	        _this2.setState({ noyo: snapshot.val() });
-	      });
-	      document.addEventListener("keydown", function (e) {
-	        if (e.key === "ArrowLeft") {
-	          _this2.moreYo();
-	        } else if (e.key === "ArrowRight") {
-	          _this2.moreNoYo();
-	        }
-	      });
-	    }
-	  }, {
-	    key: 'moreYo',
-	    value: function moreYo() {
-	      this.yoRef.transaction(function (currentYo) {
-	        return currentYo + 1;
-	      });
-	    }
-	  }, {
-	    key: 'moreNoYo',
-	    value: function moreNoYo() {
-	      this.noYoRef.transaction(function (currentNoYo) {
-	        return currentNoYo + 1;
-	      });
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var sum = this.state.yo + this.state.noyo;
-	      var maxHeight = 300;
-	      return _react2.default.createElement(
-	        'div',
-	        { id: 'controls' },
-	        _react2.default.createElement('img', { height: this.state.yo * maxHeight / sum,
-	          width: this.state.yo * maxHeight / sum,
-	          onClick: this.moreYo.bind(this),
-	          draggable: 'false',
-	          src: 'yo.svg'
-	        }),
-	        _react2.default.createElement('img', { height: this.state.noyo * maxHeight / sum,
-	          width: this.state.noyo * maxHeight / sum,
-	          onClick: this.moreNoYo.bind(this),
-	          draggable: 'false',
-	          src: 'noyo.svg'
-	        })
-	      );
-	    }
-	  }]);
-
-	  return Counter;
-	}(_react2.default.Component);
-
-	exports.default = Counter;
-
-/***/ },
+/* 174 */,
 /* 175 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -21739,6 +21634,112 @@
 	}(_react2.default.Component);
 
 	exports.default = Video;
+
+/***/ },
+/* 177 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Controls = function (_React$Component) {
+	  _inherits(Controls, _React$Component);
+
+	  function Controls() {
+	    _classCallCheck(this, Controls);
+
+	    var _this = _possibleConstructorReturn(this, (Controls.__proto__ || Object.getPrototypeOf(Controls)).call(this));
+
+	    _this.state = {
+	      yo: 0,
+	      noyo: 0
+	    };
+	    return _this;
+	  }
+
+	  _createClass(Controls, [{
+	    key: 'componentWillMount',
+	    value: function componentWillMount() {
+	      var _this2 = this;
+
+	      this.yoRef = this.props.firebase.database().ref('yo/');
+	      this.noYoRef = this.props.firebase.database().ref('noyo/');
+
+	      this.yoRef.on('value', function (snapshot) {
+	        _this2.setState({ yo: snapshot.val() });
+	      });
+	      this.noYoRef.on('value', function (snapshot) {
+	        _this2.setState({ noyo: snapshot.val() });
+	      });
+	      document.addEventListener("keydown", function (e) {
+	        if (e.key === "ArrowLeft") {
+	          _this2.moreYo();
+	        } else if (e.key === "ArrowRight") {
+	          _this2.moreNoYo();
+	        }
+	      });
+	    }
+	  }, {
+	    key: 'moreYo',
+	    value: function moreYo() {
+	      this.yoRef.transaction(function (currentYo) {
+	        return currentYo + 1;
+	      });
+	    }
+	  }, {
+	    key: 'moreNoYo',
+	    value: function moreNoYo() {
+	      this.noYoRef.transaction(function (currentNoYo) {
+	        return currentNoYo + 1;
+	      });
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var sum = this.state.yo + this.state.noyo;
+	      var maxHeight = this.props.height * .3;
+	      var yoHeight = Math.max(maxHeight / 5, this.state.yo * maxHeight / sum);
+	      var noYoHeight = Math.max(maxHeight / 5, this.state.noyo * maxHeight / sum);
+	      return _react2.default.createElement(
+	        'div',
+	        { id: 'controls' },
+	        _react2.default.createElement('img', { height: yoHeight,
+	          width: yoHeight,
+	          onClick: this.moreYo.bind(this),
+	          draggable: 'false',
+	          src: 'yo.svg'
+	        }),
+	        _react2.default.createElement('img', { height: noYoHeight,
+	          width: noYoHeight,
+	          onClick: this.moreNoYo.bind(this),
+	          draggable: 'false',
+	          src: 'noyo.svg'
+	        })
+	      );
+	    }
+	  }]);
+
+	  return Controls;
+	}(_react2.default.Component);
+
+	exports.default = Controls;
 
 /***/ }
 /******/ ]);

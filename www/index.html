@@ -2,19 +2,6 @@
 <head>
   <script src="https://www.gstatic.com/firebasejs/3.5.0/firebase.js"></script>
   <script src="https://cdn.firebase.com/libs/reactfire/1.0.0/reactfire.min.js"></script>
-  <script>
-    // Initialize Firebase
-    var config = {
-      apiKey: "AIzaSyCMuVAEkpBKQJmu14V8wupV-7DDBs0-2lQ",
-      authDomain: "chatty-aa427.firebaseapp.com",
-      databaseURL: "https://chatty-aa427.firebaseio.com",
-      storageBucket: "",
-      messagingSenderId: "1045283540357"
-    };
-    firebase.initializeApp(config);
-
-    var database = firebase.database();
-  </script>
   <script src="bundle.js" ></script>
   <style>
     body {
@@ -63,20 +50,24 @@
     }
 
     #fullscreen {
-      background-color: #DDD;
+      background-color: white;
+      background-image: url("pizza.svg");
+      background-repeat: repeat;
+      background-size: 5px;
       border: 2px solid #555;
       border-radius: 35px;
       cursor: pointer;
       display: block;
       font-size: 24px;
+      font-weight: 800;
       height: 70px;
       margin: 25px auto;
-      transition: all .15s;
+      transition: all .1s;
       width: 150px;
     }
 
     #fullscreen:hover {
-      background-color: #EFEFEF;
+      transform: scale(1.15);
     }
 
   </style>

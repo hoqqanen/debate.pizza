@@ -1,28 +1,18 @@
 import React from 'react';
 
-/**
- * A counter button: tap the button to increase the count.
- */
-class Counter extends React.Component {
+class Controls extends React.Component {
   constructor() {
     super();
     this.state = {
       yo: 0,
       noyo: 0
     };
-    this.yoRef = firebase.database().ref('yo/');
-    this.noYoRef = firebase.database().ref('noyo/');
-  }
-
-  handleResize (e) {
-    // this.setState({count: window.innerWidth});
-  }
-
-  componentDidMount() {
-    window.addEventListener('resize', this.handleResize.bind(this));
   }
 
   componentWillMount() {
+    this.yoRef = this.props.firebase.database().ref('yo/');
+    this.noYoRef = this.props.firebase.database().ref('noyo/');
+
     this.yoRef.on('value', (snapshot) => {
       this.setState({yo: snapshot.val()});
     });
@@ -52,17 +42,19 @@ class Counter extends React.Component {
 
   render() {
     var sum = this.state.yo + this.state.noyo;
-    var maxHeight = 300;
+    var maxHeight = this.props.height * .3;
+    var yoHeight = Math.max(maxHeight / 5, this.state.yo * maxHeight / sum);
+    var noYoHeight = Math.max(maxHeight / 5, this.state.noyo * maxHeight / sum);
     return (
       <div id="controls">
-        <img height={this.state.yo * maxHeight / sum}
-          width={this.state.yo * maxHeight / sum}
+        <img height={yoHeight}
+          width={yoHeight}
           onClick={this.moreYo.bind(this)}
           draggable="false"
           src="yo.svg"
         />
-        <img height={this.state.noyo * maxHeight / sum}
-          width={this.state.noyo * maxHeight / sum}
+        <img height={noYoHeight}
+          width={noYoHeight}
           onClick={this.moreNoYo.bind(this)}
           draggable="false"
           src="noyo.svg"
@@ -71,4 +63,4 @@ class Counter extends React.Component {
     );
   }
 }
-export default Counter;
+export default Controls;

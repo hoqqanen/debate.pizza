@@ -65,24 +65,30 @@
       transform: scale(1.15);
     }
 
+    #fullscreenContainer {
+      align-items: center;
+      display: flex;
+      justify-content: center;
+      margin-top: 25px;
+    }
+
     #fullscreen {
       background-color: white;
       background-repeat: repeat;
       background-size: 5px;
       border: 2px solid #555;
-      border-radius: 35px;
+      border-radius: 4px;
       cursor: pointer;
       display: block;
-      font-size: 24px;
-      font-weight: 800;
-      height: 70px;
-      margin: 25px auto;
+      font-size: 14px;
+      font-weight: 600;
+      height: 30px;
+      margin: 0 25px;
       transition: all .1s;
-      width: 150px;
     }
 
     #fullscreen:hover {
-      transform: scale(1.15);
+      background-color: #DDD;
     }
 
     #fullscreenClickjack {
@@ -110,6 +116,22 @@
   </style>
 </head>
 <body>
+  <script>window.twttr = (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0],
+    t = window.twttr || {};
+  if (d.getElementById(id)) return t;
+  js = d.createElement(s);
+  js.id = id;
+  js.src = "https://platform.twitter.com/widgets.js";
+  fjs.parentNode.insertBefore(js, fjs);
+ 
+  t._e = [];
+  t.ready = function(f) {
+    t._e.push(f);
+  };
+ 
+  return t;
+}(document, "script", "twitter-wjs"));</script>
   <div id="mount"></div>
   <div id="about">
     <h1>How does this work?</h1>

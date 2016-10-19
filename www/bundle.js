@@ -21579,10 +21579,22 @@
 	    key: "render",
 	    value: function render() {
 	      return _react2.default.createElement(
-	        "button",
-	        { id: "fullscreen",
-	          onClick: this.props.handler },
-	        "Full Screen"
+	        "div",
+	        { id: "fullscreenContainer" },
+	        _react2.default.createElement("iframe", { src: "https://www.facebook.com/plugins/share_button.php?href=https%3A%2F%2Fdebate.pizza&layout=button_count&size=large&mobile_iframe=true&appId=649813648397588&width=84&height=28", width: "84", height: "28", style: { border: "none", overflow: "hidden" }, scrolling: "no", frameborder: "0", allowTransparency: "true" }),
+	        _react2.default.createElement(
+	          "button",
+	          { id: "fullscreen",
+	            onClick: this.props.handler },
+	          "Full Screen"
+	        ),
+	        _react2.default.createElement(
+	          "a",
+	          { className: "twitter-share-button",
+	            href: "https://twitter.com/intent/tweet?text=I'm%20experiencing%20the%20debate%20on%20",
+	            "data-size": "large" },
+	          "Tweet"
+	        )
 	      );
 	    }
 	  }]);

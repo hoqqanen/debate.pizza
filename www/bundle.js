@@ -21628,7 +21628,7 @@
 	  _createClass(Video, [{
 	    key: "render",
 	    value: function render() {
-	      return _react2.default.createElement("iframe", { id: "video", src: "https://www.youtube.com/embed/h-gkBUbU_F4?autoplay=1", frameBorder: "0" });
+	      return _react2.default.createElement("iframe", { id: "video", src: "https://www.youtube.com/embed/smkyorC5qwc?autoplay=1", frameBorder: "0" });
 	    }
 	  }]);
 

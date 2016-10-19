@@ -21499,6 +21499,14 @@
 	  }
 
 	  _createClass(App, [{
+	    key: 'handleFullscreen',
+	    value: function handleFullscreen() {
+	      var el = document.getElementById("container"),
+	          rfs = // for newer Webkit and Firefox
+	      el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen || el.msRequestFullscreen;
+	      rfs.call(el);
+	    }
+	  }, {
 	    key: 'handleResize',
 	    value: function handleResize(e) {
 	      this.setState({ height: document.getElementById("video").getBoundingClientRect().height });
@@ -21519,9 +21527,11 @@
 	          'div',
 	          { id: 'container' },
 	          _react2.default.createElement(_Video2.default, null),
-	          _react2.default.createElement(_Controls2.default, { firebase: this.state.firebase, height: this.state.height })
+	          _react2.default.createElement(_Controls2.default, { firebase: this.state.firebase,
+	            height: this.state.height,
+	            fullscreenHandler: this.handleFullscreen })
 	        ),
-	        _react2.default.createElement(_Fullscreen2.default, null)
+	        _react2.default.createElement(_Fullscreen2.default, { handler: this.handleFullscreen })
 	      );
 	    }
 	  }]);
@@ -21566,20 +21576,12 @@
 	  }
 
 	  _createClass(Fullscreen, [{
-	    key: "handleFullscreen",
-	    value: function handleFullscreen() {
-	      var el = document.getElementById("container"),
-	          rfs = // for newer Webkit and Firefox
-	      el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen || el.msRequestFullscreen;
-	      rfs.call(el);
-	    }
-	  }, {
 	    key: "render",
 	    value: function render() {
 	      return _react2.default.createElement(
 	        "button",
 	        { id: "fullscreen",
-	          onClick: this.handleFullscreen },
+	          onClick: this.props.handler },
 	        "Full Screen"
 	      );
 	    }
@@ -21667,10 +21669,12 @@
 
 	    var _this = _possibleConstructorReturn(this, (Controls.__proto__ || Object.getPrototypeOf(Controls)).call(this));
 
+	    var startTime = new Date().getTime();
 	    _this.state = {
-	      yo: 0,
-	      noyo: 0
+	      yo: [[1, startTime]],
+	      noyo: [[1, startTime]]
 	    };
+	    _this.DELAY = 2000;
 	    return _this;
 	  }
 
@@ -21679,15 +21683,27 @@
 	    value: function componentWillMount() {
 	      var _this2 = this;
 
+	      var delay = this.DELAY;
+	      var dropNumber = 5000; // Maximum array size stored
 	      this.yoRef = this.props.firebase.database().ref('yo/');
 	      this.noYoRef = this.props.firebase.database().ref('noyo/');
 
 	      this.yoRef.on('value', function (snapshot) {
-	        _this2.setState({ yo: snapshot.val() });
+	        var now = new Date().getTime();
+	        var keep = _this2.state.yo.length > dropNumber ? _this2.state.yo.slice(0, 1 + _this2.state.yo.findIndex(function (e) {
+	          return now - e[1] > delay;
+	        })) : _this2.state.yo;
+	        _this2.setState({ yo: [[snapshot.val(), new Date().getTime()]].concat(keep) });
 	      });
+
 	      this.noYoRef.on('value', function (snapshot) {
-	        _this2.setState({ noyo: snapshot.val() });
+	        var now = new Date().getTime();
+	        var keep = _this2.state.noyo.length > dropNumber ? _this2.state.noyo.slice(0, 1 + _this2.state.noyo.findIndex(function (e) {
+	          return now - e[1] > delay;
+	        })) : _this2.state.noyo;
+	        _this2.setState({ noyo: [[snapshot.val(), new Date().getTime()]].concat(keep) });
 	      });
+
 	      document.addEventListener("keydown", function (e) {
 	        if (e.key === "ArrowLeft") {
 	          _this2.moreYo();
@@ -21713,25 +21729,49 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var sum = this.state.yo + this.state.noyo;
+	      var now = new Date().getTime();
+	      var delayMs = this.DELAY;
+
+	      var yoIndex = this.state.yo.findIndex(function (e, i) {
+	        return now - e[1] > delayMs;
+	      });
+	      var noYoIndex = this.state.noyo.findIndex(function (e) {
+	        return now - e[1] > delayMs;
+	      });
+	      yoIndex = yoIndex > 0 ? yoIndex : 0;
+	      noYoIndex = noYoIndex > 0 ? noYoIndex : 0;
+
+	      var yo = this.state.yo[0][0] - this.state.yo[yoIndex][0] + 1;
+	      var noyo = this.state.noyo[0][0] - this.state.noyo[noYoIndex][0] + 1;
+	      var sum = yo + noyo;
+
 	      var maxHeight = this.props.height * .3;
-	      var yoHeight = Math.max(maxHeight / 5, this.state.yo * maxHeight / sum);
-	      var noYoHeight = Math.max(maxHeight / 5, this.state.noyo * maxHeight / sum);
+	      var yoHeight = Math.max(maxHeight / 5, yo * maxHeight / sum);
+	      var noYoHeight = Math.max(maxHeight / 5, noyo * maxHeight / sum);
+
+	      var yoStyle = {
+	        height: yoHeight,
+	        width: yoHeight
+	      };
+	      var noYoStyle = {
+	        height: noYoHeight,
+	        width: noYoHeight
+	      };
+
 	      return _react2.default.createElement(
 	        'div',
 	        { id: 'controls' },
-	        _react2.default.createElement('img', { height: yoHeight,
-	          width: yoHeight,
+	        _react2.default.createElement('img', { style: yoStyle,
 	          onClick: this.moreYo.bind(this),
 	          draggable: 'false',
 	          src: 'yo.svg'
 	        }),
-	        _react2.default.createElement('img', { height: noYoHeight,
-	          width: noYoHeight,
+	        _react2.default.createElement('img', { style: noYoStyle,
 	          onClick: this.moreNoYo.bind(this),
 	          draggable: 'false',
 	          src: 'noyo.svg'
-	        })
+	        }),
+	        _react2.default.createElement('div', { id: 'fullscreenClickjack', onClick: this.props.fullscreenHandler })
 	      );
 	    }
 	  }]);

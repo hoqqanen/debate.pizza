@@ -21,6 +21,16 @@ class App extends React.Component {
     };
   }
 
+  handleFullscreen() {
+      var el = document.getElementById("container")
+        , rfs = // for newer Webkit and Firefox
+            el.requestFullScreen
+            || el.webkitRequestFullScreen
+            || el.mozRequestFullScreen
+            || el.msRequestFullscreen;
+      rfs.call(el);
+  }
+
   handleResize (e) {
     this.setState({height: document.getElementById("video").getBoundingClientRect().height});
   }
@@ -35,9 +45,11 @@ class App extends React.Component {
       <div>
         <div id="container">
           <Video />
-          <Controls  firebase={this.state.firebase} height={this.state.height} />
+          <Controls  firebase={this.state.firebase} 
+            height={this.state.height} 
+            fullscreenHandler={this.handleFullscreen} />
         </div>
-        <Fullscreen />
+        <Fullscreen handler={this.handleFullscreen} />
       </div>
     );
   }

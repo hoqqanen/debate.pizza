@@ -1,11 +1,15 @@
 <html>
 <head>
+  <title>debate.pizza</title>
+  <link rel="icon" 
+      type="image/ico" 
+      href="pizza.ico">
   <script src="https://www.gstatic.com/firebasejs/3.5.0/firebase.js"></script>
   <script src="https://cdn.firebase.com/libs/reactfire/1.0.0/reactfire.min.js"></script>
   <script src="bundle.js" ></script>
   <style>
     body {
-      background-image: url("pizza.svg");
+      background-color: #DDD;
       background-repeat: repeat;
       background-size: 40px;
       margin: 60px;
@@ -33,7 +37,9 @@
       align-items: flex-end;
       bottom: 0;
       display: flex;
+      height: 1px;
       justify-content: center;
+      pointer-events: visiblePainted;
       position: absolute;
       width: 100%;
       z-index: 2;
@@ -51,7 +57,6 @@
 
     #fullscreen {
       background-color: white;
-      background-image: url("pizza.svg");
       background-repeat: repeat;
       background-size: 5px;
       border: 2px solid #555;
@@ -70,9 +75,39 @@
       transform: scale(1.15);
     }
 
+    #fullscreenClickjack {
+      background-color: red;
+      bottom: 0;
+      cursor: pointer;
+      height: 40px;
+      opacity: 0.01;
+      position: absolute;
+      right: 0;
+      width: 40px;
+      z-index: 3;
+    }
+
+    #about {
+      background-color: rgba(255, 255, 255, 0.95);
+      border-radius: 10px;
+      box-shadow: 0 0 2px #888888;
+      padding: 0 10px;
+    }
+
+    p {
+      font-size: 20px;
+    }
   </style>
 </head>
 <body>
   <div id="mount"></div>
+  <div id="about">
+    <h1>How does this work?</h1>
+    <p>
+      Sit back, enjoy the show, and share with other viewers how you feel. 
+      Click on the emojis to share your feelings, watch as they change size and show what the crowd thinks.
+    </p>
+    <h1>Get informed by reading <a  href="https://www.amazon.com/gp/product/0451531604/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=0451531604&linkCode=as2&tag=debatepizza-20&linkId=7a7a6ac23c01633e6dfcaabdba6248f2">Democracy in America</a><img src="//ir-na.amazon-adsystem.com/e/ir?t=debatepizza-20&l=am2&o=1&a=0451531604" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />.</h1>
+  </div>
 </body>
 </html>
